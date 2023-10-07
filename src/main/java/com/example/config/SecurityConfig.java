@@ -2,6 +2,7 @@ package com.example.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -30,14 +31,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		http.logout()
 				.logoutUrl("/logout") //ログアウト処理のパス
 				.logoutSuccessUrl("/loginForm"); //ログアウト成功後のパス
-
-		/** 以下のファイルパス配下のディレクトリ、ファイルすべてを認証・認可の対象から除外します
-		src/main/resources/static/css/
-		src/main/resources/static/js/
-		src/main/resources/static/images/
-		*/
-		web.ignoring().antMatchers("/css/**", "/js/**", "/images/**");
 	}
+	
+	@Override
+  // WebSecurity型の引数を持ったconfigure()を追加します
+  public void configure(WebSecurity web) throws Exception {
+      /** 以下のファイルパス配下のディレクトリ、ファイルすべてを認証・認可の対象から除外します
+          src/main/resources/static/css/
+          src/main/resources/static/js/
+          src/main/resources/static/images/
+      */
+      web.ignoring().antMatchers("/css/**", "/js/**", "/images/**");
+  }
 
 	//ハッシュアルゴリズムの定義
 	@Bean
